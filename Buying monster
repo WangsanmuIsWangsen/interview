@@ -1,0 +1,53 @@
+#include<iostream>
+#include<string>
+#include<algorithm>
+#include<stdlib.h>
+using namespace std;
+int N;   //怪兽个数
+int min_money = 9999999;   //收买怪兽花的钱
+int *zhanli=NULL;
+int *money=NULL;
+void digui(int all_money, int all_zhanli, int number);
+int main(void)
+{
+	cin >> N;
+	zhanli = (int *)malloc(N * sizeof(int));
+	money = (int *)malloc(N * sizeof(int));
+	for (int i = 0; i < N; i++)
+		cin >> zhanli[i];
+	for (int i = 0; i < N; i++)
+		cin >> money[i];
+	digui(0, 0, 0);
+	cout << min_money;
+	return 0;
+}
+
+void digui(int all_money, int all_zhanli, int number)
+{
+	//printf("%d %d\n", zhanli[number],all_zhanli);  tiaoshi
+
+	if (number >= N-1)   //出口
+	{
+		if (all_zhanli < zhanli[N - 1])
+		{
+			all_money += money[N - 1];
+			if (all_money < min_money) min_money = all_money;
+		}
+		else {
+			if (all_money < min_money) min_money = all_money;
+		}
+	}
+	//循环体
+	else {
+		if (all_zhanli >= zhanli[number])  //可以买可以不买
+		{
+			digui(all_money + money[number], all_zhanli + zhanli[number], number+1);   //买
+			digui(all_money, all_zhanli, number+1);   //不买
+		}
+		else 
+		{
+			//printf("%d", number); tiaoshi
+			digui(all_money + money[number], all_zhanli + zhanli[number], number+1);  //必买
+		}
+	}
+}
